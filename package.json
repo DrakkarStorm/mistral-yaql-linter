@@ -1,0 +1,90 @@
+{
+  "name": "mistral-yaql-linter",
+  "displayName": "mistral-yaql-linter",
+  "description": "Une extension VS Code pour faciliter l'écriture et la validation de workflows Mistral utilisant le langage d'expression YAQL dans OpenStack.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:yaml"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "yaml",
+        "extensions": [
+          ".yml",
+          ".yaml",
+          ".mistral",
+          ".mistral.yaml",
+          ".mistral.yml"
+        ],
+        "aliases": [
+          "YAML",
+          "yml",
+          "yaml",
+          "Mistral"
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "mistral-yaql-linter.validateDocument",
+        "title": "YAQL: Validate Current File"
+      }
+    ],
+    "configuration": {
+      "title": "YAQL & Mistral Linter",
+      "properties": {
+        "yaqlMistralLinter.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable linting of YAQL expressions and Mistral workflows"
+        },
+        "yaqlMistralLinter.validateOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically validate on save"
+        },
+        "yaqlMistralLinter.validateOnType": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically validate on typing"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext .ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.99.0",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.25.1",
+    "esbuild-node-externals": "^1.13.0",
+    "eslint": "^9.23.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
