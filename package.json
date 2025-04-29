@@ -6,7 +6,7 @@
   "publisher": "DrakkarStorm",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/mistral-yaql-linter.git"
+    "url": "https://github.com/DrakkarStorm/mistral-yaql-linter.git"
   },
   "engines": {
     "vscode": "^1.99.0"
@@ -75,6 +75,12 @@
     "build": "tsc"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "github:semantic-release/changelog",
+    "@semantic-release/commit-analyzer": "github:semantic-release/commit-analyzer",
+    "@semantic-release/git": "github:semantic-release/git",
+    "@semantic-release/github": "github:semantic-release/github",
+    "@semantic-release/npm": "github:semantic-release/npm",
+    "@semantic-release/release-notes-generator": "github:semantic-release/release-notes-generator",
     "@types/js-yaml": "^4.0.9",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
