@@ -1,3 +1,17 @@
+# [1.1.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.0.0...v1.1.0) (2025-05-01)
+
+
+### Bug Fixes
+
+* delete unuse comment in changelog ([8b19f10](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/8b19f10e0bc1c231d4275e546c96d7cb4d6b584b))
+* release version 1.0.0 in package.json ([b3c16ec](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/b3c16ec38e63f9fb14d1a682d860872f4ea671a0))
+
+
+### Features
+
+* add vsce publisher ([6fc2106](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/6fc2106d17c9b500569cfe6656660251bdab73d0))
+* update release to integrate version upgrade in package json ([3f85fed](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/3f85fedc06195f8c8047cf01add811bfe1eef47f))
+
 # 1.0.0 (2025-05-01)
 
 
