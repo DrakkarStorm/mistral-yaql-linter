@@ -2,7 +2,7 @@
   "name": "mistral-yaql-linter",
   "displayName": "mistral-yaql-linter",
   "description": "Une extension VS Code pour faciliter l'écriture et la validation de workflows Mistral utilisant le langage d'expression YAQL dans OpenStack.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "DrakkarStorm",
   "repository": {
     "type": "git",
