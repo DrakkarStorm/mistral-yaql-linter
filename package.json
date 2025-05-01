@@ -72,7 +72,9 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext .ts",
-    "build": "tsc"
+    "build": "tsc",
+    "package": "vsce package",
+    "deploy": "vsce publish"
   },
   "devDependencies": {
     "@semantic-release/changelog": "github:semantic-release/changelog",
