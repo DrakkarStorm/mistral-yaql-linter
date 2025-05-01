@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.1.0...v1.1.1) (2025-05-01)
+
+
+### Bug Fixes
+
+* install vsce extension for publish ([689fa1e](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/689fa1e489ec652ce07c3a761ce610df23d1aa8b))
+
 # [1.1.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.0.0...v1.1.0) (2025-05-01)
 
 
