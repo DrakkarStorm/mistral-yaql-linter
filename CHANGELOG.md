@@ -22,13 +22,3 @@
 * Initial commit ([5ce99ea](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/5ce99eac330a8b55e3e5362c4fdffafe2b5ae3c0))
 * Update README to replace the default one ([fa0ec5a](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/fa0ec5a87ea9f4ec54791e53c0db6f192e85c40c))
 * update worlflow to add pr / push / release ([cbae624](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/cbae62485cfde7e38617d35af0a3b92b9ade2459))
-
-# Change Log
-
-All notable changes to the "mistral-yaql-linter" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
