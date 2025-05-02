@@ -11,8 +11,7 @@ export class MistralDefinitionProvider implements vscode.DefinitionProvider {
    */
   public provideDefinition(
     document: vscode.TextDocument,
-    position: vscode.Position,
-    token: vscode.CancellationToken
+    position: vscode.Position
   ): vscode.Definition | null {
     // Get the current word at the cursor position
     const wordRange = document.getWordRangeAtPosition(position);
@@ -53,7 +52,7 @@ export class MistralDefinitionProvider implements vscode.DefinitionProvider {
       }
 
       // Check all workflows for the task
-      for (const [workflowName, workflow] of Object.entries(yamlDoc.workflows)) {
+      for (const [, workflow] of Object.entries(yamlDoc.workflows)) {
         if (typeof workflow !== 'object' || !Array.isArray((workflow as any).tasks)) {
           continue;
         }

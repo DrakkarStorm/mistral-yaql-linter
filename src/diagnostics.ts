@@ -140,6 +140,7 @@ export class DiagnosticsManager {
         return true;
       }
     } catch (e) {
+      console.error("Error parsing YAML:", e);
       // YAML parsing error, can't determine if it's a Mistral file
       return false;
     }

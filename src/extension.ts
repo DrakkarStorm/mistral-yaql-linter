@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
     const diagnosticsManager = new DiagnosticsManager(context);
 
     // Register the YAQL and Mistral language features
-    registerLanguageFeatures(context, diagnosticsManager);
+    registerLanguageFeatures(context);
 
     // Register commands
     registerCommands(context, diagnosticsManager);
@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     setupDocumentListeners(context, diagnosticsManager);
 }
 
-function registerLanguageFeatures(context: vscode.ExtensionContext, diagnosticsManager: DiagnosticsManager) {
+function registerLanguageFeatures(context: vscode.ExtensionContext) {
     // Register the definition provider for Mistral files
     context.subscriptions.push(
         vscode.languages.registerDefinitionProvider(
