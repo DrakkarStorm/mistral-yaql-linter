@@ -15,6 +15,15 @@ export default [{
     },
 
     rules: {
+        // Common ESLint rules
+        'no-debugger': 'warn',
+        'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+
+        // TypeScript-specific rules
+        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
         "@typescript-eslint/naming-convention": ["warn", {
             selector: "import",
             format: ["camelCase", "PascalCase"],
@@ -25,4 +34,5 @@ export default [{
         "no-throw-literal": "warn",
         semi: "warn",
     },
+    ignores: ['dist/', 'node_modules/', '.github/'],
 }];
