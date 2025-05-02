@@ -1,7 +1,7 @@
 {
   "name": "mistral-yaql-linter",
   "displayName": "mistral-yaql-linter",
-  "description": "Une extension VS Code pour faciliter l'écriture et la validation de workflows Mistral utilisant le langage d'expression YAQL dans OpenStack.",
+  "description": "A VSCode extension to lint Mistral YAQL expressions in OpenStack workflows.",
   "version": "1.1.1",
   "publisher": "DrakkarStorm",
   "repository": {
@@ -71,7 +71,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src --ext .ts,.js --max-warnings 0",
     "build": "tsc",
     "package": "vsce package",
     "deploy": "vsce publish"
