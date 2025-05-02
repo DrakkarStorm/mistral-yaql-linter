@@ -10,7 +10,6 @@ export class MistralValidationError extends Error {
 
 interface YaqlExpr { expression: string; range: vscode.Range; }
 
-
 export class MistralValidator {
     private yaqlParser: YaqlParser;
 
@@ -18,9 +17,10 @@ export class MistralValidator {
         this.yaqlParser = new YaqlParser();
     }
 
-
     /**
-     * Validate a Mistral workflow document
+     * Validates a Mistral workflow document.
+     * @param document - The document to validate.
+     * @returns An array of validation errors.
      */
     validateDocument(
         document: vscode.TextDocument
@@ -117,7 +117,11 @@ export class MistralValidator {
     }
 
     /**
-     * Validate an individual Mistral workflow
+     * Validates an individual Mistral workflow.
+     * @param name - The name of the workflow.
+     * @param workflow - The workflow object.
+     * @param fullText - The full text of the document.
+     * @returns An array of validation errors.
      */
     private validateWorkflow(
         name: string,
@@ -169,10 +173,6 @@ export class MistralValidator {
                 )
             );
         } else {
-            // Validate each task
-            //   for (const task of workflow.tasks) {
-            //     errors.push(...this.validateTask(name, task, fullText));
-            //   }
             for (const [taskName, taskDef] of Object.entries(workflow.tasks)) {
                 errors.push(...this.validateTask(name, taskName, taskDef, fullText));
             }
@@ -207,16 +207,21 @@ export class MistralValidator {
             }
         }
 
-        // Validate other workflow fields as needed
-        // - output
-        // - vars
-        // - description
-        // etc.
-
         return errors;
     }
 
-    // --- Nouvelle méthode de validation des tâches v2 ---
+    /**
+     * Validates a Mistral task with version-specific checks.
+     *
+     * This method performs additional validation for tasks in a Mistral workflow,
+     * ensuring that various attributes meet the expected criteria.
+     *
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to validate.
+     * @param task - The task object to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
+     */
     private validateTaskV2(
         workflowName: string,
         taskName: string,
@@ -225,9 +230,9 @@ export class MistralValidator {
     ): MistralValidationError[] {
         const errors: MistralValidationError[] = [];
 
-        // Validation de base (action/workflow, input, transitions)...
+        // Validate basic attributes (action/workflow, input, transitions)...
 
-        // 3) with-items
+        // 3) Validate 'with-items'
         if (task['with-items']) {
             errors.push(
                 ...this.validateWithItems(
@@ -239,7 +244,7 @@ export class MistralValidator {
             );
         }
 
-        // 4) pause-before / wait-after
+        // 4) Validate 'pause-before' and 'wait-after'
         if (task['pause-before'] !== undefined) {
             errors.push(
                 ...this.validatePauseOrWait(
@@ -263,7 +268,7 @@ export class MistralValidator {
             );
         }
 
-        // 5) concurrency
+        // 5) Validate 'concurrency'
         if (task.concurrency !== undefined) {
             errors.push(
                 ...this.validateConcurrency(
@@ -275,7 +280,7 @@ export class MistralValidator {
             );
         }
 
-        // 6) join
+        // 6) Validate 'join'
         if (task.join !== undefined) {
             errors.push(
                 ...this.validateJoin(
@@ -287,7 +292,7 @@ export class MistralValidator {
             );
         }
 
-        // 7) target
+        // 7) Validate 'target'
         if (task.target) {
             errors.push(
                 ...this.validateTarget(
@@ -299,7 +304,7 @@ export class MistralValidator {
             );
         }
 
-        // 8) output-on-error
+        // 8) Validate 'output-on-error'
         if (task['output-on-error']) {
             errors.push(
                 ...this.validateOutputOnError(
@@ -314,7 +319,19 @@ export class MistralValidator {
         return errors;
     }
 
-    // --- Exemples de nouvelles fonctions de validation ---
+    /**
+     * Validates the 'with-items' attribute of a Mistral task.
+     *
+     * This method ensures that the 'with-items' attribute is properly structured:
+     * - It must be an object.
+     * - It must contain both 'item' and 'values' keys.
+     *
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to validate.
+     * @param withItems - The 'with-items' attribute to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
+     */
     private validateWithItems(
         workflowName: string,
         taskName: string,
@@ -322,6 +339,8 @@ export class MistralValidator {
         fullText: string
     ): MistralValidationError[] {
         const errors: MistralValidationError[] = [];
+
+        // Ensure 'with-items' is an object
         if (typeof withItems !== 'object') {
             errors.push(
                 new MistralValidationError(
@@ -331,6 +350,7 @@ export class MistralValidator {
             );
             return errors;
         }
+        // Ensure 'with-items' contains both 'item' and 'values' keys
         if (!withItems.item || !withItems.values) {
             errors.push(
                 new MistralValidationError(
@@ -339,9 +359,19 @@ export class MistralValidator {
                 )
             );
         }
+
         return errors;
     }
 
+    /**
+     * Validates the 'pause-before' and 'wait-after' attributes of a Mistral task.
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to validate.
+     * @param key - The key to validate ('pause-before' or 'wait-after').
+     * @param value - The value to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of validation errors.
+     */
     private validatePauseOrWait(
         workflowName: string,
         taskName: string,
@@ -361,6 +391,17 @@ export class MistralValidator {
         return errors;
     }
 
+    /**
+     * Validates the 'concurrency' attribute of a Mistral task.
+     *
+     * This method ensures that the 'concurrency' attribute is a number and is greater than or equal to 1.
+     *
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to validate.
+     * @param concurrency - The 'concurrency' attribute to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
+     */
     private validateConcurrency(
         workflowName: string,
         taskName: string,
@@ -379,6 +420,17 @@ export class MistralValidator {
         return errors;
     }
 
+    /**
+     * Validates the 'join' attribute of a Mistral task.
+     *
+     * This method ensures that the 'join' attribute is one of the valid values: 'all' or 'any'.
+     *
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to validate.
+     * @param join - The 'join' attribute to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
+     */
     private validateJoin(
         workflowName: string,
         taskName: string,
@@ -398,6 +450,17 @@ export class MistralValidator {
         return errors;
     }
 
+    /**
+     * Validates the 'target' attribute of a Mistral task.
+     *
+     * This method ensures that the 'target' attribute is a string expression.
+     *
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to validate.
+     * @param target - The 'target' attribute to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
+     */
     private validateTarget(
         workflowName: string,
         taskName: string,
@@ -416,6 +479,18 @@ export class MistralValidator {
         return errors;
     }
 
+    /**
+     * Validates the 'output-on-error' attribute of a Mistral task.
+     *
+     * This method ensures that the 'output-on-error' attribute is a mapping,
+     * which is necessary for properly handling and outputting errors.
+     *
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to validate.
+     * @param output - The 'output-on-error' attribute to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
+     */
     private validateOutputOnError(
         workflowName: string,
         taskName: string,
@@ -434,6 +509,17 @@ export class MistralValidator {
         return errors;
     }
 
+    /**
+     * Validates the 'task-defaults' section within a Mistral workflow.
+     *
+     * This method ensures that the 'task-defaults' attribute is an object (mapping) and
+     * follows the required structure within the specified workflow.
+     *
+     * @param workflowName - The name of the workflow containing the 'task-defaults'.
+     * @param defaults - The 'task-defaults' object to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
+     */
     private validateTaskDefaults(
         workflowName: string,
         defaults: any,
@@ -454,7 +540,20 @@ export class MistralValidator {
 
 
     /**
-     * Validate a Mistral task
+     * Validates a Mistral task to ensure it meets the required criteria.
+     *
+     * This method checks the following:
+     * - Ensures the task is a valid object.
+     * - Ensures the task has a name.
+     * - Ensures the task has at least one of the following: action, workflow, or task-defaults.
+     * - Validates the 'input' field if present.
+     * - Validates transitions (on-success, on-error, on-complete).
+     *
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to validate.
+     * @param task - The task object to validate.
+     * @param fullText - The full text of the document containing the workflow.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
      */
     private validateTask(
         workflowName: string,
@@ -522,8 +621,17 @@ export class MistralValidator {
     }
 
     /**
-     * Vérifie $.var et task('...') au sein de chaque tâche, en isolant
-     * les expressions par bloc selon indentation pour éviter les chevauchements.
+     * Validates YAQL variable references within each task, ensuring they are declared and correctly used.
+     *
+     * This method isolates expressions by block based on indentation to avoid overlaps and checks for the following:
+     * - Ensures variables referenced with $.varName are declared.
+     * - Ensures task references within expressions are valid.
+     * - Propagates published variables and local variables from 'with-items'.
+     *
+     * @param yamlDoc - The parsed YAML document.
+     * @param fullText - The full text of the document.
+     * @param allExprs - An array of all YAQL expressions extracted from the document.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
      */
     private validateYaqlVariableRefs(
         yamlDoc: any,
@@ -532,10 +640,9 @@ export class MistralValidator {
     ): MistralValidationError[] {
         const errors: MistralValidationError[] = [];
         const workflows = yamlDoc.workflows || {};
-        const lines = fullText.split(/\r?\n/);
 
         for (const [wfName, wfDef] of Object.entries<any>(workflows)) {
-            // 1) Récupère les inputs (array mixte ou mapping)
+            // 1) Retrieve inputs (mixed array or mapping)
             let declaredInputs: string[] = [];
             if (Array.isArray(wfDef.input)) {
                 for (const inp of wfDef.input) {
@@ -549,12 +656,12 @@ export class MistralValidator {
                 declaredInputs = Object.keys(wfDef.input);
             }
 
-            // 2) Initialise validVars avec les inputs
+            // 2) Initialize validVars with the inputs
             const validVars = new Set<string>(declaredInputs);
 
-            // 3) Parcours des tâches dans l'ordre
+            // 3) Iterate through tasks in order
             for (const [tName, tDef] of Object.entries<any>(wfDef.tasks || {})) {
-                // a) Récupère les variables locales de with-items
+                // a) Retrieve local variables from 'with-items'
                 const localVars = new Set<string>();
                 if (tDef['with-items'] && typeof tDef['with-items'] === 'object') {
                     const iv = tDef['with-items'].item;
@@ -563,13 +670,13 @@ export class MistralValidator {
                     }
                 }
 
-                // b) Détermine les bornes du bloc de la tâche
+                // b) Determine the boundaries of the task block
                 const tRange = this.findTaskRange(fullText, wfName, tName);
                 const startLine = tRange.start.line;
                 const indent = tRange.start.character;
                 const endLine = this.getTaskBlockEndLine(fullText.split(/\r?\n/), startLine, indent);
 
-                // c) Valide uniquement les expressions YAQL de ce bloc
+                // c) Validate only the YAQL expressions within this block
                 for (const { expression, range } of allExprs) {
                     const line = range.start.line;
                     if (line < startLine || line > endLine) { continue; }
@@ -585,7 +692,7 @@ export class MistralValidator {
                         }
                     }
 
-                    // -- Références task('...') --
+                    // -- Task references task('...') --
                     for (const m of Array.from(expression.matchAll(/task\(['"]([\w-]+)['"]\)/g))) {
                         const ref = m[1];
                         if (!wfDef.tasks || !(ref in wfDef.tasks)) {
@@ -597,12 +704,12 @@ export class MistralValidator {
                     }
                 }
 
-                // d) Propagation des variables publiées
+                // d) Propagate published variables
                 if (tDef.publish && typeof tDef.publish === 'object') {
                     Object.keys(tDef.publish).forEach(k => validVars.add(k));
                 }
 
-                // e) Propagation des variables localVars (with-items)
+                // e) Propagate local variables (with-items)
                 localVars.forEach(v => validVars.add(v));
             }
         }
@@ -610,10 +717,18 @@ export class MistralValidator {
     }
 
     /**
-   * Récupère le texte YAML de la tâche `tName` dans le workflow `wfName`.
-   */
+     * Extracts the YAML text of the task `tName` within the workflow `wfName`.
+     *
+     * This method finds the start of the task block and extracts the text up to the next line
+     * with an indentation level less than or equal to the task's indentation level.
+     *
+     * @param text - The full text of the document.
+     * @param wfName - The name of the workflow.
+     * @param tName - The name of the task.
+     * @returns The YAML text of the task.
+     */
     private extractYamlNodeText(text: string, wfName: string, tName: string): string {
-        // On localise la position de "tasks:" et de "  tName:"
+        // Locate the position of "tasks:" and "  tName:"
         const taskStartRe = new RegExp(
             `^workflows:\\s*\\n` +
             `[ \\t]*${wfName}:` +
@@ -627,8 +742,8 @@ export class MistralValidator {
         }
         const startIndex = startMatch.index + startMatch[0].lastIndexOf(tName);
 
-        // À partir de startIndex, on coupe jusqu'à la prochaine ligne dont
-        // l'indentation est ≤ celle de cette tâche (c-à-d début de bloc)
+        // From startIndex, cut until the next line with an indentation level
+        // less than or equal to that of this task (i.e., the start of the block)
         const after = text.slice(startIndex);
         const lines = after.split(/\r?\n/);
         const indent = lines[0].match(/^(\s*)/)![1].length;
@@ -644,8 +759,16 @@ export class MistralValidator {
     }
 
     /**
- * Retourne la ligne de fin de la tâche (avant une indentation plus faible ou fin de doc)
- */
+     * Returns the end line of the task block, before a line with lower indentation or the end of the document.
+     *
+     * This method determines the end of the task block by finding the next line with an indentation level
+     * less than or equal to the task's indentation level.
+     *
+     * @param lines - The lines of the document split by newline characters.
+     * @param startLine - The start line of the task block.
+     * @param indent - The indentation level of the task block.
+     * @returns The end line of the task block.
+     */
     private getTaskBlockEndLine(
         lines: string[],
         startLine: number,
@@ -663,9 +786,13 @@ export class MistralValidator {
         return lines.length - 1;
     }
 
-
     /**
-     * Check if a transition is valid (string or array of strings/objects)
+     * Checks if a transition is valid.
+     *
+     * This method ensures that the transition is either a string or an array of strings/objects.
+     *
+     * @param transition - The transition to validate.
+     * @returns True if the transition is valid, false otherwise.
      */
     private isValidTransition(transition: any): boolean {
         if (typeof transition === "string") {
@@ -684,7 +811,15 @@ export class MistralValidator {
     }
 
     /**
-     * Find the range of a key in the document
+     * Finds the positional range of a specified key within the document text.
+     *
+     * This method searches for the key in the document and returns its positional range.
+     * It calculates the line and character position of the key within the document.
+     * If the key is not found, it defaults to the beginning of the document.
+     *
+     * @param text - The full text of the document.
+     * @param key - The key to find the range for.
+     * @returns A vscode.Range object representing the positional range of the key.
      */
     private findKeyRange(text: string, key: string): vscode.Range {
         const regex = new RegExp(`(^|\\n)\\s*${key}\\s*:`, "g");
@@ -713,7 +848,15 @@ export class MistralValidator {
     }
 
     /**
-     * Find the range of a workflow in the document
+     * Finds the positional range of a specified workflow within the document text.
+     *
+     * This method searches for the workflow in the document and returns its positional range.
+     * It calculates the line and character position of the workflow within the document.
+     * If the workflow is not found, it defaults to the beginning of the document.
+     *
+     * @param text - The full text of the document.
+     * @param workflowName - The name of the workflow to find the range for.
+     * @returns A vscode.Range object representing the positional range of the workflow.
      */
     private findWorkflowRange(text: string, workflowName: string): vscode.Range {
         const regex = new RegExp(
@@ -745,7 +888,16 @@ export class MistralValidator {
     }
 
     /**
-     * Find the range of a key in a workflow
+     * Finds the positional range of a specified key within a specific workflow in the document text.
+     *
+     * This method first locates the workflow section and then searches for the key within that section.
+     * It calculates the line and character position of the key within the workflow.
+     * If the key is not found, it defaults to the range of the workflow.
+     *
+     * @param text - The full text of the document.
+     * @param workflowName - The name of the workflow containing the key.
+     * @param key - The key to find the range for.
+     * @returns A vscode.Range object representing the positional range of the key within the workflow.
      */
     private findKeyRangeInWorkflow(
         text: string,
@@ -792,7 +944,16 @@ export class MistralValidator {
     }
 
     /**
-     * Trouve la plage de texte correspondant au nom d'une tâche dans un workflow.
+     * Finds the positional range of a specified task within a specific workflow in the document text.
+     *
+     * This method searches for the task within the specified workflow and returns its positional range.
+     * It calculates the line and character position of the task within the workflow.
+     * If the task is not found, it defaults to an empty range.
+     *
+     * @param text - The full text of the document.
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task to find the range for.
+     * @returns A vscode.Range object representing the positional range of the task within the workflow.
      */
     private findTaskRange(
         text: string,
@@ -808,7 +969,7 @@ export class MistralValidator {
         );
         const m = regex.exec(text);
         if (m && m.index !== undefined) {
-            // Position du début du nom de la tâche
+            // Position the start of the task name
             const index = m.index + m[0].lastIndexOf(taskName);
             const preText = text.slice(0, index);
             const line = preText.split("\n").length - 1;
@@ -819,7 +980,7 @@ export class MistralValidator {
                 new vscode.Position(line, col + taskName.length)
             );
         }
-        // Retourne une plage vide si non trouvée
+        // return an empty range if not found
         return new vscode.Range(
             new vscode.Position(0, 0),
             new vscode.Position(0, 0)
@@ -827,7 +988,17 @@ export class MistralValidator {
     }
 
     /**
-     * Trouve la plage de texte correspondant à une clé spécifique dans une tâche donnée.
+     * Finds the text range corresponding to a specific key within a given task.
+     *
+     * This method searches for the key within the specified task and returns its positional range.
+     * It calculates the line and character position of the key within the task.
+     * If the key is not found, it defaults to an empty range.
+     *
+     * @param text - The full text of the document.
+     * @param workflowName - The name of the workflow containing the task.
+     * @param taskName - The name of the task containing the key.
+     * @param key - The key to find the range for.
+     * @returns A vscode.Range object representing the positional range of the key within the task.
      */
     private findKeyRangeInTask(
         text: string,
@@ -845,7 +1016,7 @@ export class MistralValidator {
         );
         const m = regex.exec(text);
         if (m && m.index !== undefined) {
-            // Position du début de la clé
+            // Position the beginning of the key
             const index = m.index + m[0].lastIndexOf(key);
             const preText = text.slice(0, index);
             const line = preText.split("\n").length - 1;
@@ -856,7 +1027,7 @@ export class MistralValidator {
                 new vscode.Position(line, col + key.length)
             );
         }
-        // Retourne une plage vide si non trouvée
+        // return an empty range if not found
         return new vscode.Range(
             new vscode.Position(0, 0),
             new vscode.Position(0, 0)
@@ -864,8 +1035,15 @@ export class MistralValidator {
     }
 
     /**
-   * Vérifie la conformité des noms de workflows et de tâches aux conventions OpenStack.
-   */
+     * Validates the names of workflows and tasks to ensure they conform to OpenStack conventions.
+     *
+     * This method checks if the workflow and task names match the specified naming pattern.
+     * It ensures that names are unique within the workflow and conform to the required format.
+     *
+     * @param yamlDoc - The parsed YAML document containing the workflows.
+     * @param fullText - The full text of the document.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
+     */
     private validateTaskNames(yamlDoc: any, fullText: string): MistralValidationError[] {
         const errors: MistralValidationError[] = [];
         const namePattern = /^[a-z0-9_]+$/;
@@ -904,7 +1082,14 @@ export class MistralValidator {
     }
 
     /**
-     * Détecte les tâches orphelines (déclarées mais jamais référencées par requires/on-success/on-error/on-complete).
+     * Detects orphan tasks (tasks that are declared but never referenced by requires/on-success/on-error/on-complete).
+     *
+     * This method identifies tasks that are not reachable from any entry point in the workflow.
+     * It ensures that all tasks are properly connected within the workflow.
+     *
+     * @param yamlDoc - The parsed YAML document containing the workflows.
+     * @param fullText - The full text of the document.
+     * @returns An array of MistralValidationError objects representing any validation errors found.
      */
     private validateOrphanTasks(yamlDoc: any, fullText: string): MistralValidationError[] {
         const errors: MistralValidationError[] = [];
@@ -953,5 +1138,4 @@ export class MistralValidator {
 
         return errors;
     }
-
 }
