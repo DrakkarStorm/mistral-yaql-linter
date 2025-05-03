@@ -1,3 +1,24 @@
+# [1.2.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.1.1...v1.2.0) (2025-05-03)
+
+
+### Bug Fixes
+
+* change of linting and fix error ([cf74027](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/cf74027e82cd15deabce8ebdb28495702928c5cd))
+* delete unuse of file vscode test ([f5583b5](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/f5583b5b89b04429829fc895122a989047c5e88f))
+* delete unuse of vsc-exention quickstart ([44f39f0](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/44f39f02366fe24dd5d931a6e296d0dbeefde709))
+* update documentation language ([bdc3fa3](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/bdc3fa3f83ae80987499951774c63d72b4ce252b))
+* update project description in package ([df52f02](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/df52f02cfe8301ffe15de2f31f70289911219847))
+
+
+### Features
+
+* add features and roadmap in readme ([c804c60](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/c804c60ad45e62b6e3830e1b53d40ea737212f10))
+* add icon extension and link sponsor ([d4d3927](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/d4d39270397fe2a5a6f64d1e8347181a806029d2))
+* add more linting in eslint ([21de5e8](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/21de5e81ed6a9793ebc5c9916056634ed427c2fc))
+* mutualise pull request and push build ([dce0724](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/dce0724a1b7f71940880f471f8b7aa3e6adf8af7))
+* mutualise pull request and push build ([bdbd352](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/bdbd3526eb5d688a71d55e5c9c8fc6fd4d5b8838))
+* uncomment no used parameter which block the build ([c2b99bb](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/c2b99bb36d1405eb2365f103bd2831cdf7e56e6e))
+
 ## [1.1.1](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.1.0...v1.1.1) (2025-05-01)
 
 
