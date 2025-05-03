@@ -4,6 +4,11 @@
   "description": "A VSCode extension to lint Mistral YAQL expressions in OpenStack workflows.",
   "version": "1.1.1",
   "publisher": "DrakkarStorm",
+  "icon": "images/icon.png",
+  "pricing": "Free",
+  "sponsor": {
+    "url": "https://github.com/sponsors/DrakkarStorm"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/DrakkarStorm/mistral-yaql-linter.git"
