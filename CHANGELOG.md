@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.2.0...v1.3.0) (2025-05-16)
+
+
+### Features
+
+* add cli linter for all os ([55c66b2](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/55c66b2384465f8569d2a1df4955877d8232dfae))
+
 # [1.2.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.1.1...v1.2.0) (2025-05-03)
 
 
