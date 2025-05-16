@@ -13,5 +13,5 @@
     "noUnusedParameters": true /* Report errors on unused parameters. */
   },
   "exclude": ["node_modules"],
-  "include": ["src/core", "src/extension", "bin", "test"]
+  "include": ["src", "test"]
 }
