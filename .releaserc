@@ -1,19 +1,45 @@
 {
-  "branches": ["main"],
+  "branches": [
+    "main"
+  ],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/npm",
-    ["@semantic-release/github", {
-      "assets": [
-        {"path": "out/bin", "label": "Binary"}
-      ]
-    }],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "out/bin/mistral-yaql-linter-linux",
+            "name": "mistral-yaql-linter-linux",
+            "label": "Binary for Linux"
+          },
+          {
+            "path": "out/bin/mistral-yaql-linter-macos",
+            "name": "mistral-yaql-linter-macos",
+            "label": "Binary for macOS"
+          },
+          {
+            "path": "out/bin/mistral-yaql-linter-windows.exe",
+            "name": "mistral-yaql-linter-windows.exe",
+            "label": "Binary for Windows"
+          }
+        ]
+      }
+    ],
     "@semantic-release/changelog",
-    ["@semantic-release/git", {
-      "assets": ["CHANGELOG.md", "package.json", "package-lock.json"],
-      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-    }]
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "package.json",
+          "package-lock.json"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
   ],
   "preset": "angular",
   "dryRun": false
