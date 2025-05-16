@@ -1,0 +1,8 @@
+version: '2.0'
+workflows:
+  bad-names:
+    tasks:
+      Task-One:
+        action: std.noop
+      task_two:
+        action: std.noop

@@ -1,14 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
-import * as yaml from 'js-yaml';
 import * as vscode from 'vscode';
-import { DiagnosticsManager } from './diagnostics';
-import { MistralDefinitionProvider } from './providers/definitionProvider';
+import { MistralDefinitionProvider } from './definitionProvider';
+import { DiagnosticsManager } from './diagnosticProvider';
 
-// This method is called when your extension is activated
+/**
+ * Activate the VS Code extension
+ */
 export function activate(context: vscode.ExtensionContext) {
     console.log('Extension "mistral-yaql-linter" is now active');
 
-    // Initialize the diagnostics manager
     const diagnosticsManager = new DiagnosticsManager(context);
 
     // Register the YAQL and Mistral language features
@@ -97,30 +97,4 @@ function setupDocumentListeners(context: vscode.ExtensionContext, diagnosticsMan
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
-
-// Simple YAML validator function (will be replaced by more comprehensive validation)
-export function lintDocument(document: vscode.TextDocument, diagnosticCollection: vscode.DiagnosticCollection) {
-    // Reset current diagnostics for the document
-    const diagnostics: vscode.Diagnostic[] = [];
-
-    // Get file content
-    const docContent = document.getText();
-
-    try {
-        // Try to parse the YAML; if syntax is incorrect, an exception will be thrown
-        yaml.load(docContent);
-    } catch (e: any) {
-        // Extract the error position, if available (js-yaml often provides a "mark" object)
-        const line = e.mark ? e.mark.line : 0;
-        const col = e.mark ? e.mark.column : 0;
-        const range = new vscode.Range(line, col, line, col + 1);
-
-        // Create a diagnostic with the error message
-        const diagnostic = new vscode.Diagnostic(range, e.message, vscode.DiagnosticSeverity.Error);
-        diagnostics.push(diagnostic);
-    }
-
-    // Apply diagnostics to the document
-    diagnosticCollection.set(document.uri, diagnostics);
-}
+export function deactivate() { }

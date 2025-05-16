@@ -40,7 +40,7 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm clean-install
-      # - name: Run headless test
-      #   uses: coactions/setup-xvfb@v1
-      #   with:
-      #     run: npm test
+      - name: Run headless test
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: npm test

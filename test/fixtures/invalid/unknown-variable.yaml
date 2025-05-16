@@ -1,0 +1,11 @@
+---
+version: '2.0'
+
+workflows:
+  unknown_var:
+    type: direct
+    input:
+      - a
+    tasks:
+      t1:
+        action: std.echo output="<% $.b %>"

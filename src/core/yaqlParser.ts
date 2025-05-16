@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
+import { Position, Range } from './types';
 
 export class YaqlParsingError extends Error {
-    constructor(public message: string, public position: vscode.Position) {
+    constructor(public message: string, public position: Position) {
         super(message);
         this.name = "YaqlParsingError";
     }
@@ -10,7 +10,7 @@ export class YaqlParsingError extends Error {
 interface YaqlToken {
     type: 'operator' | 'delimiter' | 'keyword' | 'function' | 'identifier' | 'string' | 'number';
     value: string;
-    range: vscode.Range;
+    range: Range;
 }
 
 export class YaqlParser {
@@ -39,7 +39,7 @@ export class YaqlParser {
     /**
      * Parse a YAQL expression and return tokens or errors
      */
-    parseExpression(text: string, offset: vscode.Position = new vscode.Position(0, 0)): { tokens: YaqlToken[], errors: YaqlParsingError[] } {
+    parseExpression(text: string, offset: Position = new Position(0, 0)): { tokens: YaqlToken[], errors: YaqlParsingError[] } {
         const tokens: YaqlToken[] = [];
         const errors: YaqlParsingError[] = [];
 
@@ -83,7 +83,7 @@ export class YaqlParser {
 
                 if (currentIndex >= text.length || text[currentIndex] !== quoteType) {
                     // Unterminated string
-                    const errorPosition = new vscode.Position(
+                    const errorPosition = new Position(
                         offset.line,
                         offset.character + startPos
                     );
@@ -95,9 +95,9 @@ export class YaqlParser {
                     tokens.push({
                         type: 'string',
                         value: stringValue,
-                        range: new vscode.Range(
-                            offset.line, offset.character + startPos,
-                            offset.line, offset.character + currentIndex
+                        range: new Range(
+                            new Position(offset.line, offset.character + startPos),
+                            new Position(offset.line, offset.character + currentIndex)
                         )
                     });
                 }
@@ -122,7 +122,7 @@ export class YaqlParser {
                     currentIndex++;
 
                     if (!/[0-9]/.test(text[currentIndex])) {
-                        const errorPosition = new vscode.Position(
+                        const errorPosition = new Position(
                             offset.line,
                             offset.character + currentIndex
                         );
@@ -138,9 +138,9 @@ export class YaqlParser {
                 tokens.push({
                     type: 'number',
                     value: numValue,
-                    range: new vscode.Range(
-                        offset.line, offset.character + startPos,
-                        offset.line, offset.character + currentIndex
+                    range: new Range(
+                        new Position(offset.line, offset.character + startPos),
+                        new Position(offset.line, offset.character + currentIndex)
                     )
                 });
 
@@ -153,9 +153,9 @@ export class YaqlParser {
                 tokens.push({
                     type: 'delimiter',
                     value: delimiterMatch,
-                    range: new vscode.Range(
-                        offset.line, offset.character + currentIndex,
-                        offset.line, offset.character + currentIndex + delimiterMatch.length
+                    range: new Range(
+                        new Position(offset.line, offset.character + currentIndex),
+                        new Position(offset.line, offset.character + currentIndex + delimiterMatch.length)
                     )
                 });
 
@@ -171,9 +171,9 @@ export class YaqlParser {
                 tokens.push({
                     type: 'operator',
                     value: operatorMatch,
-                    range: new vscode.Range(
-                        offset.line, offset.character + currentIndex,
-                        offset.line, offset.character + currentIndex + operatorMatch.length
+                    range: new Range(
+                        new Position(offset.line, offset.character + currentIndex),
+                        new Position(offset.line, offset.character + currentIndex + operatorMatch.length)
                     )
                 });
 
@@ -204,9 +204,9 @@ export class YaqlParser {
                 tokens.push({
                     type: tokenType,
                     value: identifier,
-                    range: new vscode.Range(
-                        offset.line, offset.character + startPos,
-                        offset.line, offset.character + currentIndex
+                    range: new Range(
+                        new Position(offset.line, offset.character + startPos),
+                        new Position(offset.line, offset.character + currentIndex)
                     )
                 });
 
@@ -214,7 +214,7 @@ export class YaqlParser {
             }
 
             // Unrecognized character
-            const errorPosition = new vscode.Position(
+            const errorPosition = new Position(
                 offset.line,
                 offset.character + currentIndex
             );
@@ -228,7 +228,7 @@ export class YaqlParser {
     /**
      * Validate a YAQL expression and return any errors
      */
-    validateExpression(expression: string, offset: vscode.Position = new vscode.Position(0, 0)): YaqlParsingError[] {
+    validateExpression(expression: string, offset: Position = new Position(0, 0)): YaqlParsingError[] {
         // First check if the expression is empty
         if (!expression.trim()) {
             return []; // Empty expressions are valid
@@ -239,19 +239,19 @@ export class YaqlParser {
         // Basic error checks (beyond simple tokenization)
 
         // Check for balanced brackets/parentheses
-        const bracketStack: { char: string, pos: vscode.Position }[] = [];
+        const bracketStack: { char: string, pos: Position }[] = [];
         for (const token of tokens) {
             if (token.type === 'delimiter') {
                 if (['(', '[', '{'].includes(token.value)) {
                     bracketStack.push({
                         char: token.value,
-                        pos: new vscode.Position(token.range.start.line, token.range.start.character)
+                        pos: new Position(token.range.start.line, token.range.start.character)
                     });
                 } else if (token.value === ')') {
                     if (bracketStack.length === 0 || bracketStack[bracketStack.length - 1].char !== '(') {
                         errors.push(new YaqlParsingError(
                             "Unmatched closing parenthesis",
-                            new vscode.Position(token.range.start.line, token.range.start.character)
+                            new Position(token.range.start.line, token.range.start.character)
                         ));
                     } else {
                         bracketStack.pop();
@@ -260,7 +260,7 @@ export class YaqlParser {
                     if (bracketStack.length === 0 || bracketStack[bracketStack.length - 1].char !== '[') {
                         errors.push(new YaqlParsingError(
                             "Unmatched closing bracket",
-                            new vscode.Position(token.range.start.line, token.range.start.character)
+                            new Position(token.range.start.line, token.range.start.character)
                         ));
                     } else {
                         bracketStack.pop();
@@ -269,7 +269,7 @@ export class YaqlParser {
                     if (bracketStack.length === 0 || bracketStack[bracketStack.length - 1].char !== '{') {
                         errors.push(new YaqlParsingError(
                             "Unmatched closing brace",
-                            new vscode.Position(token.range.start.line, token.range.start.character)
+                            new Position(token.range.start.line, token.range.start.character)
                         ));
                     } else {
                         bracketStack.pop();
@@ -296,8 +296,8 @@ export class YaqlParser {
      * Extract YAQL expressions from YAML text
      * Looks for patterns like <% yaql_expression %>
      */
-    extractYaqlExpressions(text: string): { expression: string, range: vscode.Range }[] {
-        const expressions: { expression: string, range: vscode.Range }[] = [];
+    extractYaqlExpressions(text: string): { expression: string, range: Range }[] {
+        const expressions: { expression: string, range: Range }[] = [];
         const regex = /<%\s*(.*?)\s*%>/g;
 
         let match;
@@ -341,7 +341,7 @@ export class YaqlParser {
 
             expressions.push({
                 expression: expressionText,
-                range: new vscode.Range(line, charPosStart, endLine, charPosEnd)
+                range: new Range(new Position(line, charPosStart), new Position(endLine, charPosEnd))
             });
         }
 

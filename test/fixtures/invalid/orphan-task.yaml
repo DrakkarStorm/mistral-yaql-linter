@@ -1,0 +1,13 @@
+---
+version: '2.0'
+
+workflows:
+  orphan_cycle:
+    type: direct
+    tasks:
+      t1:
+        action: std.noop
+        requires: [t2]
+      t2:
+        action: std.noop
+        requires: [t1]

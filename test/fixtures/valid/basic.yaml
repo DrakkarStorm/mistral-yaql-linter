@@ -1,0 +1,13 @@
+---
+version: '2.0'
+
+workflows:
+  basic_workflow:
+    type: direct
+    input:
+      - a
+    tasks:
+      task1:
+        action: std.noop
+        publish:
+          x: 1
