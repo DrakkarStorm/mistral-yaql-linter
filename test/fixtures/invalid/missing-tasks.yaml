@@ -1,0 +1,9 @@
+---
+version: '2.0'
+
+workflows:
+  missing_tasks:
+    type: direct
+    input:
+      - a
+    # 'tasks' section missing here

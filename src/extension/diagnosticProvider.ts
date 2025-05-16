@@ -1,7 +1,8 @@
 import * as yaml from 'js-yaml';
 import * as vscode from 'vscode';
-import { MistralValidationError, MistralValidator } from './mistralValidator';
-import { YaqlParser, YaqlParsingError } from './yaqlParser';
+import { MistralValidationError } from '../core/validator';
+import { YaqlParser, YaqlParsingError } from '../core/yaqlParser';
+import { MistralValidator } from './adapter';
 
 export class DiagnosticsManager {
   private diagnosticsCollection: vscode.DiagnosticCollection;
@@ -57,19 +58,23 @@ export class DiagnosticsManager {
 
       if (isMistralFile) {
         // Validate Mistral workflow structure
-        const errors = this.mistralValidator.validateDocument(document);
+        const errors = this.mistralValidator.validateDocument(document.getText());
 
         // Convert errors to diagnostics
         for (const error of errors) {
           if (error instanceof YaqlParsingError) {
+            const position = this.mistralValidator.toVSPosition(error.position);
+
             diagnostics.push(new vscode.Diagnostic(
-              new vscode.Range(error.position, error.position.translate(0, 1)),
+              new vscode.Range(position, position.translate(0, 1)),
               `YAQL syntax error: ${error.message}`,
               vscode.DiagnosticSeverity.Error
             ));
           } else if (error instanceof MistralValidationError) {
+            const range = this.mistralValidator.toVSRange(error.range);
+
             diagnostics.push(new vscode.Diagnostic(
-              error.range,
+              range,
               `Mistral error: ${error.message}`,
               vscode.DiagnosticSeverity.Error
             ));
@@ -83,8 +88,10 @@ export class DiagnosticsManager {
           const errors = this.yaqlParser.validateExpression(expr.expression, expr.range.start);
 
           for (const error of errors) {
+            const position = this.mistralValidator.toVSPosition(error.position);
+
             diagnostics.push(new vscode.Diagnostic(
-              new vscode.Range(error.position, error.position.translate(0, 1)),
+              new vscode.Range(position, position.translate(0, 1)),
               `YAQL syntax error: ${error.message}`,
               vscode.DiagnosticSeverity.Error
             ));
@@ -121,8 +128,8 @@ export class DiagnosticsManager {
     // Check filename patterns
     const filename = document.fileName.toLowerCase();
     if (filename.endsWith('.mistral') ||
-        filename.endsWith('.mistral.yaml') ||
-        filename.endsWith('.mistral.yml')) {
+      filename.endsWith('.mistral.yaml') ||
+      filename.endsWith('.mistral.yml')) {
       return true;
     }
 
@@ -134,9 +141,9 @@ export class DiagnosticsManager {
 
       // Check for Mistral workflow structure
       if (yamlDoc &&
-          typeof yamlDoc === 'object' &&
-          yamlDoc.version === '2.0' &&
-          yamlDoc.workflows) {
+        typeof yamlDoc === 'object' &&
+        yamlDoc.version === '2.0' &&
+        yamlDoc.workflows) {
         return true;
       }
     } catch (e) {

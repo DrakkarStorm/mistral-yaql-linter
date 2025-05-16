@@ -1,0 +1,44 @@
+---
+version: '2.0'
+
+workflows:
+  fullv2:
+    description: Full v2 example with all features
+    type: direct
+    input:
+      - records
+      - notify_email
+
+    tasks:
+      init:
+        action: std.noop
+        publish:
+          processed_count: 0
+
+      process_record:
+        with-items:
+          item: record
+          values: <% $.records %>
+        action: std.noop
+        concurrency: 4
+        publish:
+          processed_count: <% $.processed_count + 1 %>
+
+      wait_before_join:
+        action: std.noop
+        pause-before: 3
+        on-success:
+          - finalize
+
+      finalize:
+        action: std.echo output="Processed <% $.processed_count %> records"
+        wait-after: 2
+
+      log_error:
+        action: std.echo output="Error <% $.record %>"
+        output-on-error:
+          status: "failed"
+
+      send_notification:
+        requires: [finalize, log_error]
+        action: std.noop

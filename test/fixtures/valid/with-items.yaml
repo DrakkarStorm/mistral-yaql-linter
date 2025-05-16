@@ -1,0 +1,12 @@
+version: '2.0'
+workflows:
+  wi:
+    tasks:
+      process:
+        with-items:
+          item: vm
+          values: <% $.vms %>
+        action: std.echo output="<% $.vm %>"
+      log:
+        action: std.echo output="Done <% $.vm %>"
+        requires: [process]

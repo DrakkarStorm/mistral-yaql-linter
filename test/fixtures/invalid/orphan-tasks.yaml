@@ -1,0 +1,15 @@
+version: '2.0'
+workflows:
+  orphan-test:
+    tasks:
+      start:
+        action: std.noop
+      mid:
+        action: std.noop
+        requires: [start]
+      end:
+        action: std.noop
+        requires: [mid]
+      ghost:
+        action: std.noop
+        requires: [nonexistent]
