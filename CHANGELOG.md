@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.3.0...v1.3.1) (2025-05-16)
+
+
+### Bug Fixes
+
+* display name when release binaries ([bf61e24](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/bf61e24cc2f972f1909c902f1a8bdad2c843e9ca))
+
 # [1.3.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.2.0...v1.3.0) (2025-05-16)
 
 
