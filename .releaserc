@@ -13,17 +13,17 @@
           {
             "path": "out/bin/mistral-yaql-linter-linux",
             "name": "mistral-yaql-linter-linux",
-            "label": "Binary for Linux"
+            "label": "mistral-yaql-linter-linux"
           },
           {
             "path": "out/bin/mistral-yaql-linter-macos",
             "name": "mistral-yaql-linter-macos",
-            "label": "Binary for macOS"
+            "label": "mistral-yaql-linter-macos"
           },
           {
             "path": "out/bin/mistral-yaql-linter-windows.exe",
-            "name": "mistral-yaql-linter-windows.exe",
-            "label": "Binary for Windows"
+            "name": "mistral-yaql-linter-wind.exe",
+            "label": "mistral-yaql-linter-wind.exe"
           }
         ]
       }
