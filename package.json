@@ -6,6 +6,9 @@
   "publisher": "DrakkarStorm",
   "icon": "images/icon.png",
   "pricing": "Free",
+  "bin": {
+    "mistral-linter": "out/src/bin/cli.js"
+  },
   "sponsor": {
     "url": "https://github.com/sponsors/DrakkarStorm"
   },
@@ -71,6 +74,16 @@
       }
     }
   },
+  "pkg": {
+    "scripts": ["out/src/bin/cli.js"],
+    "assets": ["out/src/**/*.js"],
+    "targets": [
+      "node18-linux-x64",
+      "node18-macos-x64",
+      "node18-win-x64"
+    ],
+    "outputPath": "out/bin"
+  },
   "scripts": {
     "test": "jest --detectOpenHandles --passWithNoTests",
     "vscode:prepublish": "npm run compile",
@@ -78,6 +91,7 @@
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext .ts,.js --max-warnings 0",
     "build": "tsc",
+    "build:bin": "npm run build && pkg . --out-path out/bin",
     "package": "vsce package",
     "deploy": "vsce publish"
   },
@@ -101,11 +115,13 @@
     "eslint": "^9.23.0",
     "jest": "^29.7.0",
     "npm-run-all": "^4.1.5",
+    "pkg": "^5.8.1",
     "semantic-release": "^24.2.3",
     "ts-jest": "^29.3.4",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "commander": "^10.0.0"
   }
 }
