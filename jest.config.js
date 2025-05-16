@@ -1,7 +1,3 @@
-const { createDefaultPreset } = require("ts-jest");
-
-const tsJestTransformCfg = createDefaultPreset().transform;
-
 /** @type {import("jest").Config} **/
 module.exports = {
   preset: 'ts-jest',
@@ -18,6 +14,6 @@ module.exports = {
         // Configuration ts-jest
         tsconfig: 'tsconfig.json',
       },
-    ], ...tsJestTransformCfg,
+    ],
   },
 };
