@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.3.1...v1.4.0) (2025-05-18)
+
+
+### Bug Fixes
+
+* rename display name when release binaries ([8dac78f](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/8dac78f10eee094ced5ce001b4c28750f353da43))
+
+
+### Features
+
+* add autocompletion and hover signature ([#5](https://github.com/DrakkarStorm/mistral-yaql-linter/issues/5)) ([ac2306d](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/ac2306def0dfca81a74f8de56638b85cf2c2fa25))
+
 ## [1.3.1](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.3.0...v1.3.1) (2025-05-16)
 
 
