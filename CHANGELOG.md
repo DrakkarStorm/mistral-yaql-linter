@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.4.0...v1.4.1) (2025-05-18)
+
+
+### Bug Fixes
+
+* fix label bin for windows ([989b636](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/989b636de4b081f015ac0f88d604a5c5ca466832))
+
 # [1.4.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.3.1...v1.4.0) (2025-05-18)
 
 
