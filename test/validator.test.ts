@@ -17,7 +17,7 @@ describe('MistralValidator - Core Validation', () => {
   });
 
   it('should not return errors for full v2 example', () => {
-    const file = path.resolve(__dirname, 'fixtures', 'valid', 'fullv2.yaml');
+    const file = path.resolve(__dirname, 'fixtures', 'valid', 'full-v2.yaml');
     const yaml = fs.readFileSync(file, 'utf8');
     const errors = validator.validateDocument(yaml);
     expect(errors).toHaveLength(0);

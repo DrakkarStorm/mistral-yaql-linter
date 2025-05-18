@@ -2,7 +2,7 @@
 version: '2.0'
 
 workflows:
-  fullv2:
+  full-v2:
     description: Full v2 example with all features
     type: direct
     input:

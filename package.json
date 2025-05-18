@@ -56,23 +56,29 @@
     "configuration": {
       "title": "YAQL & Mistral Linter",
       "properties": {
-        "yaqlMistralLinter.enable": {
+        "mistralYaqlLinter.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable/disable linting of YAQL expressions and Mistral workflows"
         },
-        "yaqlMistralLinter.validateOnSave": {
+        "mistralYaqlLinter.validateOnSave": {
           "type": "boolean",
           "default": true,
           "description": "Automatically validate on save"
         },
-        "yaqlMistralLinter.validateOnType": {
+        "mistralYaqlLinter.validateOnType": {
           "type": "boolean",
           "default": false,
           "description": "Automatically validate on typing"
         }
       }
-    }
+    },
+    "snippets": [
+      {
+        "language": "yaml",
+        "path": "./.vscode/mistral-yaql.code-snippets"
+      }
+    ]
   },
   "pkg": {
     "scripts": [
@@ -112,7 +118,6 @@
     "@types/vscode": "^1.99.0",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
-    "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^3.3.2",
     "esbuild": "^0.25.1",
     "esbuild-node-externals": "^1.13.0",
@@ -122,10 +127,11 @@
     "pkg": "^5.8.1",
     "semantic-release": "^24.2.3",
     "ts-jest": "^29.3.4",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "yaml-ast-parser": "^0.0.43"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0",
-    "commander": "^10.0.0"
+    "commander": "^10.0.0",
+    "js-yaml": "^4.1.0"
   }
 }
