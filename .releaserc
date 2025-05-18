@@ -21,9 +21,9 @@
             "label": "mistral-yaql-linter-macos"
           },
           {
-            "path": "out/bin/mistral-yaql-linter-windows.exe",
-            "name": "mistral-yaql-linter-wind.exe",
-            "label": "mistral-yaql-linter-wind.exe"
+            "path": "out/bin/mistral-yaql-linter-win.exe",
+            "name": "mistral-yaql-linter-win.exe",
+            "label": "mistral-yaql-linter-win.exe"
           }
         ]
       }
