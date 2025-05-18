@@ -1,7 +1,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 import * as vscode from 'vscode';
+import { CompletionProvider } from './completions';
 import { MistralDefinitionProvider } from './definitionProvider';
 import { DiagnosticsManager } from './diagnosticProvider';
+import { MistralHoverProvider } from './hoverProvider';
+import { YaqlSignatureProvider } from './signatureProvider';
 
 /**
  * Activate the VS Code extension
@@ -19,8 +22,18 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Set up document change listeners
     setupDocumentListeners(context, diagnosticsManager);
+
+    // Set up completion provider
+    setupCompletionProvider(context);
+
+    // Set up hover provider
+    setupHoverProvider(context);
+
+    // Set up signature help provider
+    setupSignatureHelpProvider(context);
 }
 
+// Add this function to register language features
 function registerLanguageFeatures(context: vscode.ExtensionContext) {
     // Register the definition provider for Mistral files
     context.subscriptions.push(
@@ -31,6 +44,7 @@ function registerLanguageFeatures(context: vscode.ExtensionContext) {
     );
 }
 
+// Add this function to register commands
 function registerCommands(context: vscode.ExtensionContext, diagnosticsManager: DiagnosticsManager) {
     console.log('Registering commands...');
     // Register the validate command
@@ -45,6 +59,7 @@ function registerCommands(context: vscode.ExtensionContext, diagnosticsManager: 
     );
 }
 
+// Add this function to handle document changes and validation
 function setupDocumentListeners(context: vscode.ExtensionContext, diagnosticsManager: DiagnosticsManager) {
     // Validate all open YAML documents on activation
     vscode.workspace.textDocuments.forEach(document => {
@@ -93,6 +108,38 @@ function setupDocumentListeners(context: vscode.ExtensionContext, diagnosticsMan
         vscode.workspace.onDidCloseTextDocument(document => {
             diagnosticsManager.clearDiagnostics(document);
         })
+    );
+}
+
+// Setup the completion provider for YAML documents.
+function setupCompletionProvider(context: vscode.ExtensionContext) {
+    context.subscriptions.push(
+        vscode.languages.registerCompletionItemProvider(
+            { language: 'yaml', scheme: 'file' },
+            new CompletionProvider(),
+            '<', '%', '$', ':'
+        )
+    );
+}
+
+// Setup the hover provider for YAML documents.
+function setupHoverProvider(context: vscode.ExtensionContext) {
+    context.subscriptions.push(
+        vscode.languages.registerHoverProvider(
+            { language: 'yaml', scheme: 'file' },
+            new MistralHoverProvider()
+        ),
+    );
+}
+
+// Setup the signature help provider for YAML documents.
+function setupSignatureHelpProvider(context: vscode.ExtensionContext) {
+    context.subscriptions.push(
+        vscode.languages.registerSignatureHelpProvider(
+            { language: 'yaml', scheme: 'file' },
+            new YaqlSignatureProvider(),
+            '(', ','  // triggers
+        )
     );
 }
 

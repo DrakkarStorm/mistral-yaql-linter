@@ -1,6 +1,9 @@
 /** @type {import("jest").Config} **/
 module.exports = {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
+  moduleNameMapper: {
+    '^vscode$': '<rootDir>/test/__mocks__/vscode.ts'
+  },
   roots: ['<rootDir>/test'],
   testEnvironment: "node",
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
@@ -11,6 +14,7 @@ module.exports = {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
+        useESM: true,
         // Configuration ts-jest
         tsconfig: 'tsconfig.json',
       },

@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { MistralValidator } from '../src/core/validator';
 
-describe('MistralValidator – Fonctions avancées via fixtures YAML', () => {
+describe('MistralValidator – Advanced functions via YAML fixtures', () => {
   let validator: MistralValidator;
 
   beforeAll(() => {
@@ -21,27 +21,27 @@ describe('MistralValidator – Fonctions avancées via fixtures YAML', () => {
       'utf8'
     );
 
-  it('gère correctement with-items et propage la variable d’itération', () => {
+  it('correctly handles with-items and propagates the iteration variable', () => {
     const yaml = loadValid('with-items.yaml');
     const errs = validator.validateDocument(yaml);
     expect(errs.some(e => /Unknown YAQL variable '\$\.vm'/.test(e.message))).toBe(false);
   });
 
-  it('détecte un nom de tâche non conforme aux conventions', () => {
+  it('Detects a task name not conforming to naming conventions', () => {
     const yaml = loadInvalid('bad-task-names.yaml');
     const errs = validator.validateDocument(yaml);
     expect(errs.some(e => /Task name 'Task-One' must match/.test(e.message))).toBe(true);
     expect(errs.some(e => /Task name 'task_two' must match/.test(e.message))).toBe(false);
   });
 
-  it('repère les tâches orphelines inaccessibles', () => {
+  it('finds orphan tasks that are inaccessible', () => {
     const yaml = loadInvalid('orphan-tasks.yaml');
     const errs = validator.validateDocument(yaml);
     expect(errs.some(e => /Orphan task 'ghost'/.test(e.message))).toBe(true);
     expect(errs.some(e => /Orphan task 'start'/.test(e.message))).toBe(false);
   });
 
-  it('autorise la définition d\'inputs sous forme de mapping avec valeur par défaut', () => {
+  it('authorizes the definition of inputs as a mapping with default values', () => {
     const yaml = loadValid('map-inputs.yaml');
     const errs = validator.validateDocument(yaml);
     expect(errs).toHaveLength(0);

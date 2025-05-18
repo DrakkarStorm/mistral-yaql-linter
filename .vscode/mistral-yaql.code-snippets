@@ -1,0 +1,166 @@
+{
+  "Mistral Workflow Skeleton": {
+    "prefix": "mistral-workflow",
+    "body": [
+      "---",
+      "version: '2.0'",
+      "",
+      "name: ${1:my_workbook}",
+      "description: ${2:Description of this workbook}",
+      "",
+      "workflows:",
+      "  ${3:workflow_name}:",
+      "    type: direct",
+      "    description: ${4:Short description of workflow}",
+      "    input:",
+      "      - ${5:input1}",
+      "    tasks:",
+      "      ${6:task1}:",
+      "        action: ${7:std.echo} output=\"<% $.${5} %>\"",
+      "        publish:",
+      "          ${8:out_var}: <% $.${5} %>",
+      "        on-success:",
+      "          - ${9:next_task}"
+    ],
+    "description": "Insert a full Mistral v2 workflow skeleton with metadata and one task"
+  },
+
+  "Task Skeleton": {
+    "prefix": "mistral-task",
+    "body": [
+      "${1:task_name}:",
+      "  action: ${2:std.noop}",
+      "  input:",
+      "    ${3:param1}: ${4:value1}",
+      "  publish:",
+      "    ${5:out_var}: ${6:value2}",
+      "  requires: [${7:previous_task}]",
+      "  on-success: [${8:next_task}]",
+      "  on-error: [${9:error_handler}]",
+      "  retry:",
+      "    count: ${10:3}",
+      "    delay: ${11:10}",
+      "  concurrency: ${12:1}",
+      "  pause-before: ${13:5}",
+      "  wait-after: ${14:2}"
+    ],
+    "description": "Insert a detailed task skeleton with all common properties"
+  },
+
+  "Input Array": {
+    "prefix": "input-array",
+    "body": [
+      "input:",
+      "  - ${1:param1}",
+      "  - ${2:param2}"
+    ],
+    "description": "Define workflow inputs as an array of variable names"
+  },
+
+  "Input Mapping with Defaults": {
+    "prefix": "input-map",
+    "body": [
+      "input:",
+      "  ${1:param1}: ${2:null}",
+      "  ${3:param2}: ${4:default_value}"
+    ],
+    "description": "Define workflow inputs as a mapping with default values"
+  },
+
+  "Publish Variables": {
+    "prefix": "publish",
+    "body": [
+      "publish:",
+      "  ${1:var1}: <% $.${2:input} %>",
+      "  ${3:var2}: ${{4:expression}}"
+    ],
+    "description": "Publish variables for downstream tasks"
+  },
+
+  "With-Items Loop": {
+    "prefix": "with-items",
+    "body": [
+      "with-items:",
+      "  item: ${1:item_name}",
+      "  values: <% $.${2:list_var} %>",
+      "action: ${3:std.echo} output=\"Processing <% $.${1} %>\""
+    ],
+    "description": "Insert a with-items loop to iterate over a list"
+  },
+
+  "Retry Block": {
+    "prefix": "retry",
+    "body": [
+      "retry:",
+      "  count: ${1:3}",
+      "  delay: ${2:10}"
+    ],
+    "description": "Add retry policy to a task"
+  },
+
+  "On Success Transition": {
+    "prefix": "on-success",
+    "body": [
+      "on-success:",
+      "  - ${1:next_task}"
+    ],
+    "description": "Define tasks to run on success"
+  },
+
+  "On Error Transition": {
+    "prefix": "on-error",
+    "body": [
+      "on-error:",
+      "  - ${1:error_task}"
+    ],
+    "description": "Define tasks to run on error"
+  },
+
+  "Join Control Flow": {
+    "prefix": "join",
+    "body": [
+      "join: ${1|all,any|}"
+    ],
+    "description": "Specify join behavior for branched tasks (all or any)"
+  },
+
+  "Pause Before": {
+    "prefix": "pause-before",
+    "body": [
+      "pause-before: ${1:seconds}"
+    ],
+    "description": "Insert a pause before task execution"
+  },
+
+  "Wait After": {
+    "prefix": "wait-after",
+    "body": [
+      "wait-after: ${1:seconds}"
+    ],
+    "description": "Insert a wait after task execution"
+  },
+
+  "Concurrency Limit": {
+    "prefix": "concurrency",
+    "body": [
+      "concurrency: ${1:1}"
+    ],
+    "description": "Set maximum concurrent executions for a task"
+  },
+
+  "Action Call": {
+    "prefix": "action",
+    "body": [
+      "action: ${1:module.action} ${2:param1}=<% $.${3:var} %> ${4:param2}='${5:value}'"
+    ],
+    "description": "Insert an action call with parameters"
+  },
+
+  "YAQL Expression": {
+    "prefix": "yaql",
+    "body": [
+      "<% ${1:expression} %>"
+    ],
+    "description": "Insert a YAQL expression tag"
+  }
+}

@@ -18,6 +18,16 @@ import { YaqlParsingError } from '../core/yaqlParser';
     .description('Lint OpenStack Mistral v2 workflows (YAQL/Jinja)');
 
   program
+    .command('init files...')
+    .description('Initialize a new Mistral workflow project')
+    .action((file: string) => {
+      if (file === undefined || file === null || file === '') {
+        return console.error('Please specify a file to initialize.');
+      }
+      init(file);
+    });
+
+  program
     .command('lint [files...]')
     .description('Run validation on one or more workflow files or directories')
     .option('-s, --strict', 'treat warnings as errors (hide success messages)', false)
@@ -29,6 +39,35 @@ import { YaqlParsingError } from '../core/yaqlParser';
     });
 
   program.parse(process.argv);
+
+  async function init(file: string) {
+    const filePath = path.resolve(process.cwd(), file);
+    if (!fs.existsSync(filePath)) {
+      console.error(`File not found: ${file}`);
+      return;
+    }
+    console.log(`Initialized new Mistral workflow file: ${file}`);
+    const initWorkflow = `---
+  version: '2.0'
+  name: ${file}
+  description: A simple workflow that does nothing.
+  workflows:
+    workflow_name:
+      type: direct,
+      description: Short description of workflow
+      input:
+        - input1
+
+      tasks:
+        task1:
+          action: std.noop
+          publish:
+            out_var: <% $.input1 %>
+          on-success:
+            - next_task
+`;
+    fs.writeFileSync(filePath, initWorkflow);
+  }
 
   async function lint(
     files: string[],
