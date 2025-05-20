@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.5.0...v1.5.1) (2025-05-20)
+
+
+### Bug Fixes
+
+* cleanup vsix archive and include yaml ast parser lib ([94b188b](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/94b188bb874542ac72cb753d1ae1b6cb609fcd0c))
+
 # [1.5.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.4.1...v1.5.0) (2025-05-20)
 
 
