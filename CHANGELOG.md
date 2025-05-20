@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.4.1...v1.5.0) (2025-05-20)
+
+
+### Features
+
+* upgrade version in package lock ([3388753](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/338875305945b0a6ed256afbe4dd1509e5e47749))
+
 ## [1.4.1](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.4.0...v1.4.1) (2025-05-18)
 
 
