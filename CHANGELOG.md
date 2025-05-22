@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.5.1...v1.5.2) (2025-05-22)
+
+
+### Bug Fixes
+
+* drop minimum vscode version to 1.70 ([8d84dcb](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/8d84dcb2a0289ef286d62c016aae387b14135ace))
+
 ## [1.5.1](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.5.0...v1.5.1) (2025-05-20)
 
 
