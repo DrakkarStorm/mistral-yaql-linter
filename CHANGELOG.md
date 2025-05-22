@@ -1,3 +1,11 @@
+## [1.5.3](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.5.2...v1.5.3) (2025-05-22)
+
+
+### Bug Fixes
+
+* rollback drop minimum vscode version to 1.99 ([9804ea9](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/9804ea95b513013fdfdc4f28cbfa822898699b89))
+* rollback drop minimum vscode version to 1.99 ([fd21a80](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/fd21a807a789f1c4eb32e2f753f40c5dcb4dbd6e))
+
 ## [1.5.2](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.5.1...v1.5.2) (2025-05-22)
 
 
