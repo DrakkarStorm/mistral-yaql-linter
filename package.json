@@ -2,7 +2,7 @@
   "name": "mistral-yaql-linter",
   "displayName": "mistral-yaql-linter",
   "description": "A VSCode extension to lint Mistral YAQL expressions in OpenStack workflows.",
-  "version": "1.5.2",
+  "version": "1.5.1",
   "publisher": "DrakkarStorm",
   "icon": "images/icon.png",
   "pricing": "Free",
@@ -17,7 +17,7 @@
     "url": "git+https://github.com/DrakkarStorm/mistral-yaql-linter.git"
   },
   "engines": {
-    "vscode": "^1.70.0"
+    "vscode": "^1.99.0"
   },
   "categories": [
     "Linters",
