@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.5.3...v1.6.0) (2025-05-27)
+
+
+### Features
+
+* add generate diagram from mistral workflow ([#7](https://github.com/DrakkarStorm/mistral-yaql-linter/issues/7)) ([cd7e0dc](https://github.com/DrakkarStorm/mistral-yaql-linter/commit/cd7e0dcbd1ca9616285a11a5622184df614f4352))
+
 ## [1.5.3](https://github.com/DrakkarStorm/mistral-yaql-linter/compare/v1.5.2...v1.5.3) (2025-05-22)
 
 
