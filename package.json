@@ -50,7 +50,11 @@
     "commands": [
       {
         "command": "mistral-yaql-linter.validateDocument",
-        "title": "YAQL: Validate Current File"
+        "title": "Mistral: Validate Current File"
+      },
+      {
+        "command": "mistral-yaql-linter.showDiagram",
+        "title": "Mistral: Show Mistral Workflow Diagram"
       }
     ],
     "configuration": {
