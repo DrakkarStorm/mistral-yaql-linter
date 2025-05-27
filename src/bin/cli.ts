@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
+import { spawnSync } from 'child_process';
 import { Command } from 'commander';
 import * as fs from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import * as path from 'path';
+import { generateDotFromYaml } from '../core/diagramGenerator';
 import { Range } from '../core/types';
 import { MistralValidationError, MistralValidator } from '../core/validator';
 import { YaqlParsingError } from '../core/yaqlParser';
@@ -36,6 +39,32 @@ import { YaqlParsingError } from '../core/yaqlParser';
         files = ['.'];
       }
       lint(files, { strict: cmd.strict });
+    });
+
+  program
+    .command('diagram <workflow.yaml>')
+    .description('Generate a Graphviz diagram from a Mistral YAML')
+    .option('-o, --output <file>', 'output filename (SVG or DOT)', 'workflow.svg')
+    .action((yamlPath, opts) => {
+      const text = readFileSync(yamlPath, 'utf8');
+      const dot = generateDotFromYaml(text);
+
+      if (opts.output.endsWith('.dot')) {
+        writeFileSync(opts.output, dot, 'utf8');
+        console.log(`Wrote DOT to ${opts.output}`);
+      } else {
+        // assume Graphviz is installed: dot -Tsvg
+        const dotProc = spawnSync('dot', ['-Tsvg'], {
+          input: dot,
+          encoding: 'utf8'
+        });
+        if (dotProc.status !== 0) {
+          console.error(dotProc.stderr);
+          process.exit(dotProc.status || 1);
+        }
+        writeFileSync(opts.output, dotProc.stdout, 'utf8');
+        console.log(`Wrote diagram to ${opts.output}`);
+      }
     });
 
   program.parse(process.argv);

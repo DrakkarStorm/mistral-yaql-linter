@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { CompletionProvider } from './completions';
 import { MistralDefinitionProvider } from './definitionProvider';
 import { DiagnosticsManager } from './diagnosticProvider';
+import { DiagramManager } from './diagramPanel';
 import { MistralHoverProvider } from './hoverProvider';
 import { YaqlSignatureProvider } from './signatureProvider';
 
@@ -54,6 +55,18 @@ function registerCommands(context: vscode.ExtensionContext, diagnosticsManager: 
             if (editor) {
                 diagnosticsManager.validateDocument(editor.document);
                 vscode.window.showInformationMessage('YAQL & Mistral validation complete');
+            }
+        })
+    );
+
+    const diagramManager = new DiagramManager(context);
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('mistral-yaql-linter.showDiagram', () => {
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                diagramManager.showDiagram();
+                vscode.window.showInformationMessage('Diagram panel opened');
             }
         })
     );

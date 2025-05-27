@@ -19,6 +19,8 @@ This is the Visual Studio Code extension **mistral-yaql-linter**, which provides
   - snippets for common task patterns and YAQL constructs.
   - signatures for YAQL functions.
   - hover tooltips for task definitions and YAQL functions.
+- **Visualization**:
+  -  generate a diagram of the workflow directly from the editor.
 
 ## Roadmap
 
@@ -36,6 +38,28 @@ This is the Visual Studio Code extension **mistral-yaql-linter**, which provides
 - **Visual Studio Code** >=1.99
 - **js-yaml** (bundled)
 
+### Optional
+
+For the diagram feature, you'll need:
+- **Graphviz** for workflow diagrams (https://graphviz.org/download/)
+
+#### macOS
+
+```bash
+brew update
+brew install graphviz
+```
+
+#### Windows
+
+Download and install from https://graphviz.org/download/
+
+#### Linux
+
+```bash
+sudo apt-get install graphviz
+```
+
 ## Installation
 
 Install dependencies and build the extension before running:
@@ -49,6 +73,13 @@ Execute the extension in a new VS Code window:
 1. Go to the Debug viewlet (`Ctrl+Shift+D` or `Cmd+Shift+D`).
 2. Select `Run Extension` from the dropdown.
 3. Press `F5` to start debugging (or click the green arrow).
+
+## Usage
+
+### Commands
+
+- **Mistral: Validate Current File**: `mistral-yaql-linter.validateDocument`
+- **Mistral: Show Mistral Workflow Diagram**: `mistral-yaql-linter.showDiagram`
 
 ## Extension Settings
 
